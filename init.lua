@@ -160,7 +160,18 @@ require('lazy').setup({
   },
 
   {
+    'theprimeagen/harpoon'
+  },
+
+  {
     'mbbill/undotree'
+  },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+      -- add any options here
+    },
+    lazy = false,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -239,6 +250,9 @@ vim.keymap.set("n", "q", "<c-v>", { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- Window command Remap
+vim.keymap.set("n", "<leader>w", "<C-w>", {silent = true} )
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -262,6 +276,18 @@ require('telescope').setup {
     },
   },
 }
+
+-- [[ Configure Harpoon ]]
+local mark = require("harpoon.mark")
+local ui = require("harpoon.ui")
+
+vim.keymap.set("n", "<leader>af", mark.add_file)
+vim.keymap.set("n", "<C-i>", ui.toggle_quick_menu)
+
+vim.keymap.set("n", "<C-j>", function() ui.nav_file(1) end)
+vim.keymap.set("n", "<C-k>", function() ui.nav_file(2) end)
+vim.keymap.set("n", "<C-l>", function() ui.nav_file(3) end)
+vim.keymap.set("n", "<C-;>", function() ui.nav_file(4) end)
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -384,7 +410,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
